@@ -1,3 +1,19 @@
+# Root node modules
+node_modules/
+
+# Client
+client/dist/
+client/.env
+
+# Server
+server/node_modules/
+server/.env
+
+# Build / generated
+dist
+dist-ssr
+*.local
+
 # Logs
 logs
 *.log
@@ -11,9 +27,6 @@ node_modules
 dist
 dist-ssr
 *.local
-
-# Env
-server/.env
 
 # Editor directories and files
 .vscode/*

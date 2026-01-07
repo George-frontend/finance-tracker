@@ -1,15 +1,14 @@
-import './style.css'
-import { supabase } from './config/supabase.js'
+import './styles/style.css'
 
-async function testConnection() {
-  const { data, error } = await supabase.auth.getSession()
-
-  if (error) {
-    console.log('No connection', error.message)
-  } else {
-    console.log('Connected')
-    console.log(data)
+async function testBackend() {
+  try {
+    const res = await fetch('http://localhost:5000/api/test')
+    const data = await res.json()
+    console.log('Response from backend:', data.message)
+  } catch (error) {
+    console.error('Error connecting to backend:', error)
   }
 }
 
-testConnection()
+testBackend();
+
