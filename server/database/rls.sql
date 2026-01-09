@@ -1,3 +1,10 @@
+alter table profiles enable row level security;
+
+create policy "Users can manage own profile"
+on profiles
+for all
+using (auth.uid() = id);
+
 ALTER TABLE wallets ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Users can view their wallet"
