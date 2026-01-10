@@ -39,4 +39,29 @@ CREATE TABLE wallets (
 
   created_at timestamp DEFAULT now(),
   updated_at timestamp DEFAULT now()
+
+  amount numeric(10,2) NOT NULL DEFAULT 0,
+
+  created_at timestamp DEFAULT now()
+);
+
+-- Transactions Table 
+
+CREATE TABLE transactions (
+
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(), -- Generated unique identifier
+
+  user_id = uuid NOT NULL
+    REFERENCES auth.user_id(id) On DELETE CASCADE, -- Transaction to user 
+  
+  wallet_id uuid NOT NULL
+    REFERENCES wallets(id) ON DELETE CASCADE, -- To wallet 
+
+  amount numeric(12,2) NOT NULL
+    CHECK (amount > 0), -- Transaction amount (positive)
+
+  type text NOT NULL
+    CHECK (type IN ('income', 'expense')), -- Transaction type
+
+  created_at timestamp DEFAULT now()
 )
