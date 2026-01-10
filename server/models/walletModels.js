@@ -23,4 +23,11 @@ export async function createWalletForUser(userID) {
 
     if (error) throw error;
     return data;
-}
+};
+
+export async function updateWalletBalance(walletId, amount) {
+  return supabase
+    .from('wallets')
+    .update({ amount })
+    .eq('id', walletId);
+};

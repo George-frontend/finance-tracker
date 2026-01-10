@@ -16,3 +16,10 @@ CREATE POLICY "Users can create their wallet"
 ON wallets
 FOR INSERT
 WITH CHECK (user_id = auth.uid());
+
+ALTER TABLE transactions ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Users can manage their own transactions"
+ON transactions
+FOR ALL
+USING (auth.uid() = user_id)
+WITH CHECK (auth.uid() = user_id);
