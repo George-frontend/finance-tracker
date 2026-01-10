@@ -10,7 +10,7 @@ CREATE TABLE profiles (
   updated_at timestamp default now()
 );
 
--- Trigger за auto-create profile
+-- Trigger for auto-create profile
 CREATE FUNCTION public.handle_new_user()
 RETURNS trigger AS $$
 BEGIN
@@ -27,11 +27,16 @@ FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
 
 CREATE TABLE wallets (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id uuid UNIQUE REFERENCES auth.users(id) ON DELETE CASCADE,
 
-  amount numeric(10,2) not null,
-  type text check (type in ('income','expense')),
-  description text,
+  user_id uuid UNIQUE
+    REFERENCES auth.users(id)
+    ON DELETE CASCADE,
 
-  created_at timestamp DEFAULT now()
+  currency text NOT NULL
+    CHECK (currency IN ('EUR', 'USD')),
+
+  balance numeric(12,2) NOT NULL DEFAULT 0,
+
+  created_at timestamp DEFAULT now(),
+  updated_at timestamp DEFAULT now()
 );
