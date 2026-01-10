@@ -39,10 +39,6 @@ CREATE TABLE wallets (
 
   created_at timestamp DEFAULT now(),
   updated_at timestamp DEFAULT now()
-
-  amount numeric(10,2) NOT NULL DEFAULT 0,
-
-  created_at timestamp DEFAULT now()
 );
 
 -- Transactions Table 
