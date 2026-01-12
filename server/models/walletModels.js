@@ -1,33 +1,44 @@
-import { supabase } from '../config/supabase.js';
+import { supabase } from "../config/supabase.js";
 
 export async function fetchWalletByUser(userID) {
+  const { data, error } = await supabase
 
-    const {data, error} = await supabase
-
-    .from('wallets')
-    .select('*')
-    .eq('user_id', userID)
+    .from("wallets")
+    .select("*")
+    .eq("user_id", userID)
     .single();
 
-    if (error) throw error;
-    return data;
+  if (error) {
+    // if rows are zero return null
+    if (error.details && error.details.includes("Results contain 0 rows")) {
+      return null;
+    }
+    // Other errors
+    throw error;
+  }
+  return data;
 };
 
-export async function createWalletForUser(userID) {
-    
-    const { data, error} = await supabase
+export async function createWalletForUser(userID, currency) {
+  if (!["EUR", "USD"].includes(currency)) throw new Error("Invalid currency");
 
-    .from('wallets')
-    .insert([{ user_id: userID}])
+  const { data, error } = await supabase
+
+    .from("wallets")
+    .insert([{ user_id: userID, currency, balance: 0  }])
     .single();
 
-    if (error) throw error;
-    return data;
+  if (error) throw error;
+  return data;
 };
 
-export async function updateWalletBalance(walletId, amount) {
-  return supabase
-    .from('wallets')
-    .update({ amount })
-    .eq('id', walletId);
+export async function updateWalletBalance(walletId, userId, newBalance) {
+  const { data, error } = await supabase
+    .from("wallets")
+    .update({ balance: newBalance })
+    .eq("id", walletId)
+    .eq("user_id", userId);
+
+  if (error) throw error;
+  return data;
 };
