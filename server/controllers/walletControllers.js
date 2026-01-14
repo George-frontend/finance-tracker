@@ -1,24 +1,39 @@
-import { fetchWalletByUser, createWalletForUser } from "../models/walletModels.js";
+import { getWalletService, createWalletService, updateBalanceWalletService} from "../services/walletService.js";
 
 export async function getWallet(req, res, next) {
+
   try {
-    const userId = req.user.id; // Get from auth middleware
-    const wallet = await fetchWalletByUser(userId);
+    const wallet = await getWalletService(req.user.id);
+
     res.json(wallet);
+
+  } catch (err) {
+    next(err);
+  }
+};
+
+export async function createWallet(req, res, next) {
+  try {
+    const wallet = await createWalletService(req.user.id);
+    res.status(201).json(wallet);
   } catch (err) {
     next(err);
   }
 }
 
-export async function createWallet(req, res) {
-    
-    try {
-        const userId = req.user.Id;
-        const wallet = await createWalletForUser(userId);
+export async function updateWalletBalance(req, res, next) {
+  try {
+    const { walletId, newBalance } = req.body;
 
-        res.json(wallet);
+    // service giving back updated wallet
+    const updatedWallet = await updateBalanceWalletService(
+      req.user.id,
+      walletId,
+      newBalance
+    );
 
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
+    res.status(200).json(updatedWallet);
+  } catch (err) {
+    next(err);
+  }
 }

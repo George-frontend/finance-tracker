@@ -1,11 +1,11 @@
 import { supabase } from "../config/supabase.js";
 
-export async function fetchWalletByUser(userID) {
+export async function fetchWalletByUser(userId) {
   const { data, error } = await supabase
 
     .from("wallets")
     .select("*")
-    .eq("user_id", userID)
+    .eq("user_id", userId)
     .single();
 
   if (error) {
@@ -19,13 +19,13 @@ export async function fetchWalletByUser(userID) {
   return data;
 };
 
-export async function createWalletForUser(userID, currency) {
+export async function createWalletForUser(userId, currency) {
   if (!["EUR", "USD"].includes(currency)) throw new Error("Invalid currency");
 
   const { data, error } = await supabase
 
     .from("wallets")
-    .insert([{ user_id: userID, currency, balance: 0  }])
+    .insert([{ user_id: userId, currency, balance: 0  }])
     .single();
 
   if (error) throw error;
