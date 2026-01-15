@@ -4,6 +4,8 @@ import {
   updateWalletBalance as updateWalletBalanceInDB,
 } from "../models/walletModels.js";
 
+import { supabase } from '../config/supabase.js';
+
 // getWalletService
 
 export async function getWalletService(userId) {
@@ -35,18 +37,31 @@ export async function createWalletService(userId, currency = 'EUR') {
 // updateBalanceService
 
 export async function updateBalanceWalletService(walletId, userId, newBalance) {
-    
-    const wallet = await fetchWalletFromDB(userId);
-
-    if (!wallet) {
-        throw new Error("Wallet not found");
-    }
-
     if (newBalance < 0) {
         throw new Error("Balance cannot be negative");
     }
 
-    const updatedWallet = await updateWalletBalance(walletId, userId, newBalance);
+    // Taking wallet with userId and walletId
+    const { data: wallet, error } = await supabase
+        .from("wallets")
+        .select("*")
+        .eq("id", walletId)
+        .eq("user_id", userId)
+        .maybeSingle(); // return null if dont have a row
+
+    if (error) throw error;
+    if (!wallet) throw new Error("Wallet not found");
+
+    // Updating balance
+    const { data: updatedWallet, error: updateError } = await supabase
+        .from("wallets")
+        .update({ balance: newBalance })
+        .eq("id", walletId)
+        .eq("user_id", userId)
+        .single(); // return new row
+
+    if (updateError) throw updateError;
 
     return updatedWallet;
-};
+}
+

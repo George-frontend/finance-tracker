@@ -30,8 +30,7 @@ FOR EACH ROW
 EXECUTE PROCEDURE public.handle_new_user();
 
 -- Wallets table
--- A user can have one or more wallets (default: one)
-CREATE TABLE wallets (
+CREATE TABLE public.wallets (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
 
   user_id uuid NOT NULL
@@ -46,7 +45,9 @@ CREATE TABLE wallets (
   is_default boolean DEFAULT true,
 
   created_at timestamp DEFAULT now(),
-  updated_at timestamp DEFAULT now()
+  updated_at timestamp DEFAULT now(),
+
+  CONSTRAINT one_wallet_per_user UNIQUE (user_id)
 );
 
 -- Categories table

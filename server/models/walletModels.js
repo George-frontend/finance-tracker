@@ -6,16 +6,9 @@ export async function fetchWalletByUser(userId) {
     .from("wallets")
     .select("*")
     .eq("user_id", userId)
-    .single();
+    .maybeSingle();
 
-  if (error) {
-    // if rows are zero return null
-    if (error.details && error.details.includes("Results contain 0 rows")) {
-      return null;
-    }
-    // Other errors
-    throw error;
-  }
+  if (error) throw error;
   return data;
 };
 
@@ -26,7 +19,8 @@ export async function createWalletForUser(userId, currency) {
 
     .from("wallets")
     .insert([{ user_id: userId, currency, balance: 0  }])
-    .single();
+    .select()
+    .maybeSingle();
 
   if (error) throw error;
   return data;

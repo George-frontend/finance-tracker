@@ -27,8 +27,8 @@ export async function updateWalletBalance(req, res, next) {
 
     // service giving back updated wallet
     const updatedWallet = await updateBalanceWalletService(
-      req.user.id,
       walletId,
+      req.user.id,
       newBalance
     );
 

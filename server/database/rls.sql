@@ -8,24 +8,18 @@ FOR ALL
 USING (auth.uid() = id)
 WITH CHECK (auth.uid() = id);
 
--- Enable Row Level Security on wallets
-ALTER TABLE wallets ENABLE ROW LEVEL SECURITY;
-
--- Users can view only their own wallets
 CREATE POLICY "Users can view their wallets"
-ON wallets
+ON public.wallets
 FOR SELECT
 USING (user_id = auth.uid());
 
--- Users can create wallets only for themselves
 CREATE POLICY "Users can create their wallets"
-ON wallets
+ON public.wallets
 FOR INSERT
 WITH CHECK (user_id = auth.uid());
 
--- Users can update and delete only their own wallets
 CREATE POLICY "Users can manage their wallets"
-ON wallets
+ON public.wallets
 FOR UPDATE, DELETE
 USING (user_id = auth.uid())
 WITH CHECK (user_id = auth.uid());
