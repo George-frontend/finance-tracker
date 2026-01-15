@@ -1,8 +1,10 @@
 import express from 'express';
-import { getTransactions, addTransaction } from '../controllers/transactionsControllers.js';
+import { getTransactions, createTransaction } from '../controllers/transactionsController.js';
+import { authenticate } from '../middleware/auth.js';
+
 const router = express.Router();
 
-router.get('/', getTransactions);
-router.post('/', addTransaction);
+router.get('/:walletId', authenticate, getTransactions);
+router.post('/', authenticate, createTransaction);
 
-export default router
+export default router;

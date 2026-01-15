@@ -13,10 +13,17 @@ export async function fetchTransactionByWallet(walletId) {
   return data;
 };
 
-export async function createTransaction(userId, walletId, amount, type) {
+export async function createTransaction(userId, walletId, categoryId, amount, description = '', transactionDate = new Date()) {
   const { data, error } = await supabase
     .from('transactions')
-    .insert([{ user_id: userId, wallet_id: walletId, amount, type }])
+    .insert([{
+      user_id: userId,
+      wallet_id: walletId,
+      category_id: categoryId,
+      amount,
+      description,
+      transaction_date: transactionDate
+    }])
     .single();
 
   if (error) throw error;
