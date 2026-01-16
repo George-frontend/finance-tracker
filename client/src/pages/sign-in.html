@@ -3,9 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Sign in</title>
 </head>
 <body>
-    
+    <h2>Sign in</h2>
+
+    <p>Fill in all fields to sign in</p>
+
+    <form>
+
+        <label for="username"> <strong>Username</strong></label>
+        <input type="text" placeholder="username" name="username" id="username" required>
+
+        <label for="email"> <strong>Email</strong></label>
+        <input type="email" placeholder="example@gmai.com" name="email" id="email" required>
+
+        <label for="psw"> <strong>Password</strong></label>
+        <input type="password" placeholder="password" name="psw" id="psw" required>
+
+        <button type="submit"> <a href="/src/pages/profile.html"></a>Sign in</button>
+
+        <div class="container signup">
+            <p>You don't have an account? <a href="/src/pages/sign-up.html">Sign up</a>.</p>
+        </div>
+    </form>
 </body>
 </html>

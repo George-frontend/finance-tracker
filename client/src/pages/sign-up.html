@@ -3,9 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+
+    <title>Sign up</title>
 </head>
 <body>
-    
+    <h2>Sign up</h2>
+
+    <p>Fill in all fields to create an account:</p>
+
+    <form>
+        <label for="full-name"> <strong>Full Name</strong></label>
+        <input type="text" placeholder="your full name" name="full-name" id="full-name" required>
+
+        <label for="username"> <strong>Username</strong></label>
+        <input type="text" placeholder="username" name="username" id="username" required>
+
+        <label for="email"> <strong>Email</strong></label>
+        <input type="email" placeholder="example@gmai.com" name="email" id="email" required>
+
+        <label for="psw"> <strong>Password</strong></label>
+        <input type="password" placeholder="password" name="psw" id="psw" required>
+
+        <label for="confirm-psw"> <strong>Confirm Password</strong></label>
+        <input type="password" placeholder="confirm password" name="confirm-psw" id="confirm-psw" required>
+
+        <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
+        
+        <button type="submit"> <a href="/src/pages/sign-in.html"></a>Sign up</button>
+
+        <div class="container signin">
+            <p>Already have an account? <a href="/src/pages/sign-in.html">Sign in</a>.</p>
+        </div>
+    </form>
+
 </body>
 </html>
