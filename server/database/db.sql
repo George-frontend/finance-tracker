@@ -69,24 +69,14 @@ CREATE TABLE categories (
 
 -- Transactions table
 -- Stores financial operations linked to wallets and categories
-CREATE TABLE transactions (
+CREATE TABLE public.transactions (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-
-  user_id uuid NOT NULL
-    REFERENCES auth.users(id) ON DELETE CASCADE,
-
-  wallet_id uuid NOT NULL
-    REFERENCES wallets(id) ON DELETE CASCADE,
-
-  category_id uuid NOT NULL
-    REFERENCES categories(id) ON DELETE RESTRICT,
-
-  amount numeric(12,2) NOT NULL
-    CHECK (amount > 0),
-
-  description text,              -- Optional user description
-
+  user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  wallet_id uuid NOT NULL REFERENCES wallets(id) ON DELETE CASCADE,
+  category_id uuid NOT NULL REFERENCES categories(id) ON DELETE RESTRICT,
+  amount numeric(12,2) NOT NULL CHECK (amount > 0),
+  description text,
   transaction_date date NOT NULL DEFAULT CURRENT_DATE,
-
   created_at timestamp DEFAULT now()
 );
+

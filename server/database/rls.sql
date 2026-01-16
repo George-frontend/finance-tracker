@@ -25,11 +25,15 @@ USING (user_id = auth.uid())
 WITH CHECK (user_id = auth.uid());
 
 -- Enable Row Level Security on transactions
-ALTER TABLE transactions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.transactions ENABLE ROW LEVEL SECURITY;
 
--- Users can view, create, update and delete only their own transactions
-CREATE POLICY "Users can manage their own transactions"
-ON transactions
-FOR ALL
-USING (user_id = auth.uid())
+CREATE POLICY "Users can view their transactions"
+ON public.transactions
+FOR SELECT
+USING (user_id = auth.uid());
+
+CREATE POLICY "Users can create transactions"
+ON public.transactions
+FOR INSERT
 WITH CHECK (user_id = auth.uid());
+
