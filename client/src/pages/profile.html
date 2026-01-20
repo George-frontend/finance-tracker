@@ -1,12 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Your Tracker</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Profile</title>
 </head>
 <body>
-    <h1>Welcome to your Finance Tracker</h1>
+
+  <header>
+    <h1>Your Finance Tracker</h1>
+    <button id="logoutBtn">Logout</button>
+  </header>
+
+  <main>
+
+    <section id="user-info">
+      <h2>User Info</h2>
+      <p>Email: <span id="user-email">—</span></p>
+    </section>
+
+    <section id="wallet">
+      <h2>Wallet</h2>
+      <p>Balance: <span id="wallet-balance">0</span></p>
+      <button id="add-wallet">Create Wallet</button>
+    </section>
+
+    <section id="transactions">
+      <h2>Transactions</h2>
+      <ul id="transactions-list">
+        <!-- transactions go here -->
+      </ul>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>© 2026 Personal Finance App</p>
+  </footer>
+
+  <script type="module" src="/src/js/profile.js"></script>
 </body>
 </html>
