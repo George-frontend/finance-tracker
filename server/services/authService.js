@@ -1,6 +1,7 @@
 import { supabase } from "../config/supabase.js";
 
 import bcrypt from "bcrypt";
+import { createWallet } from "./walletService.js";
 
 export async function checkUserByEmail(email) {
 
@@ -14,29 +15,38 @@ export async function checkUserByEmail(email) {
 
     if (!data || data.length === 0) return null;
 
-    return data[0]; // return the first row if it exists, otherwise return null
+    return data[0]; // return the first row
 };
 
 
 export async function signUp(fullName, username, email, password) {
-    const existingUser = await checkUserByEmail(email); // Check if a user with the given email already exists
+    const existingUser = await checkUserByEmail(email);
 
-    if (existingUser) throw new Error("User already exists"); // Throw an error if user already exists
+    if (existingUser) {
+        throw new Error("User already exists");
+    }
 
-    const hashedPassword = await bcrypt.hash(password, 10); // Hash the password before storing it in the database
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    const { data, error } = await supabase.from("users").insert({ // Insert the new user into the "users" table
-        full_name: fullName,           // store the full name
-        username,
-        email,                         // store the email
-        password: hashedPassword       // store the hashed password
-    });
+    const { data: newUser, error } = await supabase
+        .from("users")
+        .insert({
+            full_name: fullName,
+            username,
+            email,
+            password: hashedPassword
+        })
+        .select()
+        .single(); 
 
-    if (error) throw new Error("Failed to create user"); // Throw an error if inserting the user failed
+    if (error) {
+        throw new Error("Failed to create user");
+    }
 
-    return data[0]; // Return the first row of the inserted user
+    const wallet = await createWallet(newUser.id);
+
+    return { user: newUser, wallet };
 };
-
 
 export async function signIn(email, password) {
     
@@ -53,5 +63,4 @@ export async function signIn(email, password) {
     }
 
     return existingUser;
-
-}
+};
