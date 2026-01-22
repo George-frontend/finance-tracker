@@ -7,6 +7,7 @@ client/.env
 
 # Server
 server/node_modules/
+server/node_modules/.package-lock.json
 server/.env
 
 # Build / generated

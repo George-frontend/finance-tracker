@@ -1,5 +1,7 @@
 import { supabase } from "../config/supabase.js";
 
+import bcrypt from "bcrypt";
+
 export async function checkUserByEmail(email) {
 
     const { data, error } = await supabase
@@ -10,11 +12,13 @@ export async function checkUserByEmail(email) {
 
     if (error) throw new Error("Database error"); // throw an error if the query fails
 
-    return data[0] || null; // return the first row if it exists, otherwise return null
+    if (!data || data.length === 0) return null;
+
+    return data[0]; // return the first row if it exists, otherwise return null
 };
 
 
-export async function signUp(fullName, email, password) {
+export async function signUp(fullName, username, email, password) {
     const existingUser = await checkUserByEmail(email); // Check if a user with the given email already exists
 
     if (existingUser) throw new Error("User already exists"); // Throw an error if user already exists
@@ -23,6 +27,7 @@ export async function signUp(fullName, email, password) {
 
     const { data, error } = await supabase.from("users").insert({ // Insert the new user into the "users" table
         full_name: fullName,           // store the full name
+        username,
         email,                         // store the email
         password: hashedPassword       // store the hashed password
     });
