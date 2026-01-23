@@ -1,8 +1,6 @@
 import { supabase } from "../config/supabase.js";
 import bcrypt from "bcrypt";
 
-
-import bcrypt from "bcrypt";
 import { createWallet } from "./walletService.js";
 
 export async function checkUserByEmail(email) {
@@ -15,7 +13,7 @@ export async function checkUserByEmail(email) {
 
     if (error) throw new Error("Database error"); // throw an error if the query fails
 
-
+3
     if (!data || data.length === 0) {
         return null; //  user not found
     }
