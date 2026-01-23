@@ -2,11 +2,11 @@ import { signUp, signIn } from "../services/authService.js"
 
 export async function register(req, res) {
     
-    const { fullName, email, password} = req.body
+    const { fullName, username, email, password} = req.body
 
     try { 
-        const user = await signUp(fullName, email, password);
-        res.status(201).json({ user }); // return created user
+        const { user, wallet } = await signUp(fullName, username, email, password);
+        res.status(201).json({ user, wallet }); // return created user
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
