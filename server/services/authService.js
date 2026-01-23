@@ -1,4 +1,6 @@
 import { supabase } from "../config/supabase.js";
+import bcrypt from "bcrypt";
+
 
 export async function checkUserByEmail(email) {
 
@@ -10,7 +12,11 @@ export async function checkUserByEmail(email) {
 
     if (error) throw new Error("Database error"); // throw an error if the query fails
 
-    return data[0] || null; // return the first row if it exists, otherwise return null
+    if (!data || data.length === 0) {
+        return null; //  user not found
+    }
+
+    return data[0]; // return the first row if it exists
 };
 
 
