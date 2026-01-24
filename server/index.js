@@ -3,6 +3,7 @@ import cors from 'cors';
 
 // Imports
 import authRoutes from "./routes/authRoutes.js";
+import transactionRoutes from "./routes/transactionRoutes.js"
 
 const app = express();
 
@@ -11,6 +12,7 @@ app.use(express.json());
 
 // Routes
 app.use("/auth", authRoutes);
+app.use("/transaction", transactionRoutes);
 
 const PORT = process.env.PORT || 5000;
 
