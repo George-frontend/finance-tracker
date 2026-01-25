@@ -4,6 +4,7 @@ import cors from 'cors';
 // Imports
 import authRoutes from "./routes/authRoutes.js";
 import transactionRoutes from "./routes/transactionRoutes.js"
+import categoryRoutes from "./routes/categoryRoutes.js"
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(express.json());
 // Routes
 app.use("/auth", authRoutes);
 app.use("/transaction", transactionRoutes);
+app.use("/category", categoryRoutes);
 
 const PORT = process.env.PORT || 5000;
 
