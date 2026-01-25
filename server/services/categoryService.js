@@ -30,3 +30,41 @@ export async function addCategory(userId, nameOfCategory, typeOfCategory) {
 
     return addedCategory[0];
 }; 
+
+export async function deleteCategory(categoryId, userId) {
+    
+    const { data: category, error} = await supabase
+        .from("categories")
+        .select("*")
+        .eq("id", categoryId)
+        .single();
+
+    if (error || !category) {
+        throw new Error("Category not found");
+    }
+
+    if (category.user_id !== userId) {
+        throw new Error("Unauthorized");
+    }
+
+    const { data: transactions } = await supabase
+    .from("transactions")
+    .select("*")
+    .eq("category_id", categoryId);
+
+    if (transactions.length > 0) {
+        throw new Error("Cannot delete category with existing transactions");
+    }
+
+    const {data: deletedCategory, error: deleteError} = await supabase
+        .from("categories")
+        .delete()
+        .eq("id", categoryId)
+        .select();
+
+    if (deleteError) {
+        throw new Error("Failed to delete category");
+    }
+
+    return deletedCategory[0];
+};
