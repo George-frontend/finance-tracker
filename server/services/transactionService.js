@@ -63,7 +63,7 @@ export async function addTransaction(userId, categoryId, amount, currency, descr
 
 export async function deleteTransaction(transactionId, userId) {
 
-    // 1. Get the transaction by its id
+    // Get the transaction by its id
     const { data: transaction, error } = await supabase
         .from("transactions")
         .select("*")
@@ -74,12 +74,12 @@ export async function deleteTransaction(transactionId, userId) {
         throw new Error("Transaction not found");
     }
 
-    // 2. Check if the transaction belongs to the current user
+    // Check if the transaction belongs to the current user
     if (transaction.user_id !== userId) {
         throw new Error("Unauthorized");
     }
 
-    // 3. Get the category to know if it is income or expense
+    // Get the category to know if it is income or expense
     const { data: category, error: categoryError } = await supabase
         .from("categories")
         .select("type")
@@ -90,7 +90,7 @@ export async function deleteTransaction(transactionId, userId) {
         throw new Error("Category not found");
     }
 
-    // 4. Get the wallet related to this transaction
+    // Get the wallet related to this transaction
     const { data: wallet, error: walletError } = await supabase
         .from("wallets")
         .select("balance")
@@ -101,7 +101,7 @@ export async function deleteTransaction(transactionId, userId) {
         throw new Error("Wallet not found");
     }
 
-    // 5. Calculate the new balance (reverse of addTransaction)
+    // Calculate the new balance (reverse of addTransaction)
     let newBalance;
 
     if (category.type === "income") {
@@ -110,7 +110,7 @@ export async function deleteTransaction(transactionId, userId) {
         newBalance = wallet.balance + transaction.amount; // restore expense
     }
 
-    // 6. Update wallet balance
+    // Update wallet balance
     await supabase
         .from("wallets")
         .update({ balance: newBalance })
@@ -120,7 +120,7 @@ export async function deleteTransaction(transactionId, userId) {
         throw new Error("Failed to update wallet balance");
     }
 
-    // 7. Delete the transaction
+    // Delete the transaction
     const { error: deleteError } = await supabase
         .from("transactions")
         .delete()
@@ -130,6 +130,6 @@ export async function deleteTransaction(transactionId, userId) {
         throw new Error("Failed to delete transaction");
     }
 
-    return transaction; // return deleted transaction (optional)
+    return transaction; // return deleted transaction
 };
 
