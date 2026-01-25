@@ -20,6 +20,8 @@ export async function addTransaction(userId, categoryId, amount, currency, descr
         .select("name, type")
         .eq("id", categoryId)
         .single();
+    
+    // console.log("Category query result:", { data: category, error: categoryError });
 
     if (categoryError || !category) throw new Error("Category not found");
 
@@ -32,6 +34,16 @@ export async function addTransaction(userId, categoryId, amount, currency, descr
         newBalance = wallet.balance - amount; // Subtract if expense
     }
 
+    // Debuging
+    // console.log("Inserting transaction with data:", {
+    //     wallet_id: wallet.id,
+    //     user_id: userId,
+    //     category_id: categoryId,
+    //     amount,
+    //     currency,
+    //     description
+    // });
+
     // Insert the transaction into the transactions table
     // Important: Use wallet.id, not user-provided wallet_id, to prevent fraud
     const { data: newTransactionData, error: transactionError } = await supabase
@@ -42,11 +54,15 @@ export async function addTransaction(userId, categoryId, amount, currency, descr
             category_id: categoryId,
             amount,
             currency,
-            description
+            description,
+            date: new Date().toISOString()
         })
         .select(); // Important: .select() returns the inserted row
 
-    if (transactionError) throw new Error("Failed to create transaction");
+    if (transactionError) {
+        // console.log("Supabase insert error:", transactionError);
+        throw new Error("Failed to create transaction");
+    }   
 
     // Update the wallet balance AFTER successful insert
     // Important: Do not update balance before insert to avoid inconsistencies on failure
@@ -111,11 +127,11 @@ export async function deleteTransaction(transactionId, userId) {
     }
 
     // Update wallet balance
-    await supabase
+    const { error: walletUpdateError } = await supabase
         .from("wallets")
         .update({ balance: newBalance })
         .eq("id", transaction.wallet_id);
-    
+
     if (walletUpdateError) {
         throw new Error("Failed to update wallet balance");
     }
@@ -131,5 +147,4 @@ export async function deleteTransaction(transactionId, userId) {
     }
 
     return transaction; // return deleted transaction
-};
-
+}
