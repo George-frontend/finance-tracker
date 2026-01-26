@@ -23,6 +23,8 @@ form.addEventListener("submit", async (e) => {
             alert(data.error);
             return;
         };
+
+        localStorage.setItem("token", data.token);
         
         window.location.href = "./profile.html";
     } catch (err) {
